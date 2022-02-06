@@ -1,9 +1,15 @@
-FROM golang
-RUN mkdir /go_exercise
-RUN mkdir /go_exercise/input_files/
-ADD wf2.go /go_exercise/
-ADD ./input_files/* /go_exercise/input_files/
-WORKDIR /go_exercise
-RUN go build -o wf2 .
-CMD ["/go_exercise/wf2"]
+FROM golang:1.17-alpine
+
+WORKDIR /usr/src/app
+
+# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
+COPY go.mod ./
+RUN go mod download && go mod verify
+
+COPY wf2.go .
+ADD input_files ./input_files
+RUN go build -v -o /usr/local/bin/app ./...
+
+CMD ["app"]
+
 

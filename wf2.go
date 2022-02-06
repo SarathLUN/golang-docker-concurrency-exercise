@@ -6,6 +6,7 @@ import (
     "os"
     "strings"
     "sync"
+    "time"
 )
 
 /* Global slice of maps containing parse results. Each element of the slice is a map for a unique file */
@@ -55,6 +56,7 @@ func process_file(file_name string, i int, wg *sync.WaitGroup) {
 
 func main() {
 
+    start := time.Now()
 
     // Open the output file.
     fo, err := os.Create("exercise2-output.txt")
@@ -119,6 +121,9 @@ func main() {
         fmt.Printf("%v %v \n", word, word_count)
         fmt.Fprintf(fo, "%v %v \n", word, word_count)
     }
+
+    fmt.Println("---------")
+    fmt.Println("Execution Time = ",time.Since(start))
 
 }
 
